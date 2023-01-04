@@ -1,11 +1,17 @@
-import Testing from "./components/Testing"
+import Context from "./components/Context"
+import SignUp from "./components/SignUp"
+import Theme from "./components/ThemeContext"
 
-function App() {
+
+const App = () => {
   return (
     <div>
-      <Testing />
+      <Context>
+        <Theme>
+          <SignUp />
+        </Theme>
+      </Context>
     </div>
   )
 }
-
 export default App
