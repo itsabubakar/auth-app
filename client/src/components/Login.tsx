@@ -14,7 +14,7 @@ import EyeHidden from "../assets/EyeHidden"
 import { Link } from "react-router-dom"
 
 
-const SignUp = () => {
+const Login = () => {
     const { toggleDarkMode, value } = useContext(ThemeContext)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -55,7 +55,7 @@ const SignUp = () => {
 
     return (
         <div className="items-center grid justify-center h-screen dark:bg-[#333333]">
-            <div className="py-5 px-5 xs:border border-[#BDBDBD] xs:mx-4 xs:px-8 max-w-sm rounded-xl">
+            <div className="py-5 px-5 xs:border border-[#BDBDBD] xs:mx-4 xs:px-8 max-w-md rounded-xl">
                 <div className="flex justify-between items-center mb-8">
                     {value ? <DevChallengesLight /> : <DevChallenge />}
 
@@ -65,8 +65,7 @@ const SignUp = () => {
                     />
                 </div>
                 <div>
-                    <p className="mb-4 font-semibold text-lg text-slate-800 dark:text-white">Join thousands of learners from around the world</p>
-                    <p className="mb-4 text-slate-700 dark:text-white">Master web development by making real-life projects. There are multiple paths for you to choose</p>
+                    <p className="mb-8 font-semibold text-lg text-slate-800 dark:text-white">Login</p>
                 </div>
 
                 <form onSubmit={handleSubmit}>
@@ -95,8 +94,8 @@ const SignUp = () => {
                         <button className=""><Github /></button>
                     </div>
                     <div className="flex mt-3">
-                        <p className="text-gray-600 dark:text-white">Already a member?</p>
-                        <Link className="text-blue-500 ml-1" to="login">Login</Link>
+                        <p className="text-gray-600 dark:text-white">Don't have an account yet?</p>
+                        <Link className="text-blue-500 ml-1" to="/">Register</Link>
                     </div>
 
                 </div>
@@ -105,4 +104,4 @@ const SignUp = () => {
         </div>
     )
 }
-export default SignUp
+export default Login
