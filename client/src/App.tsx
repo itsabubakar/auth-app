@@ -5,6 +5,7 @@ import Login from "./components/Login"
 import SignUp from "./components/SignUp"
 import Theme from "./components/ThemeContext"
 import UserInfo from './components/UserInfo'
+import DetailsForm from './components/DetailsForm'
 
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
               {/* <Route path='/' element={<SignUp />} /> */}
               <Route path='/' element={<UserInfo />} />
               <Route path='/login' element={<Login />} />
+              <Route path='/edit' element={<DetailsForm />} />
               {/* <Route path='/userinfo/:id' element={<UserInfo />} /> */}
             </Routes>
           </Router>
