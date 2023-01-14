@@ -1,15 +1,25 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
-const port = 8080
+const PORT = 8080
+const cors = require('cors')
+const path = require('path')
+const connectDB = require('./config/dbConn')
+const mongoose = require('mongoose')
 
-const { sup, hauwa, boom } = require('./middleware/middle')
+app.use(cors())
+app.use(express.json())
+connectDB()
 
-app.get('/', (req, res) => {
-    res.send({ data: 'hello' })
+// const { sup, hauwa, boom } = require('./middleware/middle')
+
+app.use('/api', require('./routes/authRoutes'))
+
+mongoose.connection.once('open', () => {
+    app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`))
+    console.log('Connection to database successfull')
 })
 
-app.get('/test', boom, (req, res) => {
-    res.send({ data: 'hello' })
+mongoose.connection.on('error', err => {
+    console.log(err);
 })
-
-app.listen(port, () => console.log(`Server running on port ${port}`))

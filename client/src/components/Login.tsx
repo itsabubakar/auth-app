@@ -11,34 +11,76 @@ import Github from "../assets/Github"
 import DevChallengesLight from "../assets/DevChallengesLight"
 import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import api from "./AxiosBase"
 
 
 const Login = () => {
+    const navigate = useNavigate()
+
     const { toggleDarkMode, value } = useContext(ThemeContext)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [pwdVisibility, setPwdVisibility] = useState('password')
+
+    // error states
     const [emailErr, setEmailErr] = useState(false)
-    const [pwdErr, setPwdErr] = useState(false)
+    const [loginErr, setLoginErr] = useState(false)
+    const [upperCaseErr, setUpperCaseErr] = useState(false)
+    const [lowerCaseErr, setLowerCaseErr] = useState(false)
+    const [charsErr, setCharsErr] = useState(false)
 
     const handleSubmit = (e: { preventDefault: () => void }) => {
         e.preventDefault()
         const validEmail = isEmail(email)
-        const validPwd = isValidPwd(password)
+        const hasUpperCase = containsUpperCase(password)
+        const hasLowerCase = containsLowerCase(password)
+        const hasSixOrMoreChars = sixOrMoreChars(password)
 
-        if (validEmail && validPwd) {
-            console.log(email, password)
+
+        if (!validEmail) {
+            setEmailErr(true)
+        }
+
+        if (!hasUpperCase) {
+            setUpperCaseErr(true)
+
+        }
+        if (!hasLowerCase) {
+            setLowerCaseErr(true)
+
+        }
+        if (!hasSixOrMoreChars) {
+            setCharsErr(true)
+        }
+
+        if (validEmail && hasUpperCase && hasLowerCase && hasSixOrMoreChars) {
+
+            const response = api.post('/api/login', { email, password })
+                .then((resp) => {
+                    navigate('/dashboard')
+                })
+                .catch((error) => {
+                    console.log(error.response.data)
+                    setLoginErr(true)
+                })
+
             return
         }
     }
 
     const handleEmailChange = (e: { target: { value: SetStateAction<string> } }) => {
         setEmail(e.target.value)
+        setEmailErr(false)
+        setLoginErr(false)
     }
 
     const handlePasswordChange = (e: { target: { value: string } }) => {
         setPassword(e.target.value.trim())
+        setCharsErr(false)
+        setLowerCaseErr(false)
+        setUpperCaseErr(false)
+        setLoginErr(false)
     }
 
     const handleVisibility = () => {
@@ -50,7 +92,15 @@ const Login = () => {
     }
 
     const isEmail = (email: string) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
-    const isValidPwd = (password: string) => /^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z]).{6,}$/.test(password)
+
+    // password validators
+    // const isValidPwd = (password: string) => /^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z]).{6,}$/.test(password) 
+    const containsUpperCase = (password: string) => /^(?=[^A-Z]*[A-Z])/.test(password)
+    const containsLowerCase = (password: string) => /^(?=[^a-z]*[a-z])/.test(password)
+    const sixOrMoreChars = (password: string) => {
+        if (password.length >= 6) { return true }
+        else { return false }
+    }
 
 
     return (
@@ -70,13 +120,14 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit}>
 
+                    <span>{loginErr && <p className="text-center mb-2 text-red-500">Email or password incorrect</p>}</span>
+
                     <div className="border-[#BDBDBD] border mb-4 py-2 rounded-lg flex">
                         <label className="mx-3" htmlFor="email"><Email /></label>
                         <input value={email} onChange={handleEmailChange} className="w-full outline-none dark:bg-inherit dark:text-white" type="text" placeholder="Email" name="email" />
                     </div>
 
                     <div className="border-[#BDBDBD] border mb-4 py-2 rounded-lg flex">
-                        <span>{pwdErr && <p></p>}</span>
                         <label className="mx-2.5" htmlFor="password"><Password /></label>
                         <input value={password} onChange={handlePasswordChange} className="w-full outline-none dark:bg-[#333333] dark:text-white" type={pwdVisibility} placeholder="Password" name="password" />
                         <button onClick={handleVisibility} className="mr-1">{pwdVisibility === 'password' ? <Eye /> : <EyeHidden />}</button>

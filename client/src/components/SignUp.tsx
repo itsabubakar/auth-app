@@ -11,17 +11,23 @@ import Github from "../assets/Github"
 import DevChallengesLight from "../assets/DevChallengesLight"
 import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import api from "./AxiosBase"
+
+
 
 
 const SignUp = () => {
+    const navigate = useNavigate()
+
     const { toggleDarkMode, value } = useContext(ThemeContext)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [pwdVisibility, setPwdVisibility] = useState('password')
 
     // error states
-    const [emailErr, setEmailErr] = useState(true)
+    const [emailErr, setEmailErr] = useState(false)
+    const [emailExist, setEmailExist] = useState(false)
     const [upperCaseErr, setUpperCaseErr] = useState(false)
     const [lowerCaseErr, setLowerCaseErr] = useState(false)
     const [charsErr, setCharsErr] = useState(false)
@@ -32,7 +38,6 @@ const SignUp = () => {
         const hasUpperCase = containsUpperCase(password)
         const hasLowerCase = containsLowerCase(password)
         const hasSixOrMoreChars = sixOrMoreChars(password)
-        console.log(hasUpperCase, hasLowerCase, hasSixOrMoreChars)
 
 
         if (!validEmail) {
@@ -52,7 +57,17 @@ const SignUp = () => {
         }
 
         if (validEmail && hasUpperCase && hasLowerCase && hasSixOrMoreChars) {
-            console.log(email, password)
+
+            const response = api.post('/api/signup', { email, password })
+                .then((resp) => {
+                    console.log(resp.data)
+                    navigate('/dashboard')
+                })
+                .catch((error) => {
+                    console.log(error.response.data.email)
+                    setEmailExist(true)
+                })
+
             return
         }
     }
@@ -60,6 +75,7 @@ const SignUp = () => {
     const handleEmailChange = (e: { target: { value: SetStateAction<string> } }) => {
         setEmail(e.target.value)
         setEmailErr(false)
+        setEmailExist(false)
     }
 
     const handlePasswordChange = (e: { target: { value: string } }) => {
@@ -107,6 +123,7 @@ const SignUp = () => {
                 <form onSubmit={handleSubmit}>
 
                     <span>{emailErr && <p className="text-center mb-2 text-red-500">Please enter a valid email</p>}</span>
+                    <span>{emailExist && <p className="text-center mb-2 text-red-500">Email already exists</p>}</span>
                     <div className={`${emailErr ? 'border-red-500' : 'border-[#BDBDBD]'} border mb-4 py-2 rounded-lg flex`}>
                         <label className="mx-3" htmlFor="email"><Email /></label>
                         <input value={email} onChange={handleEmailChange} className={`w-full outline-none dark:bg-inherit dark:text-white`} type="text" placeholder="Email" name="email" />
