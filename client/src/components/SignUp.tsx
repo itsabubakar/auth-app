@@ -13,6 +13,7 @@ import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
 import { Link, useNavigate } from "react-router-dom"
 import api from "./AxiosBase"
+import { UserContext } from "./Context"
 
 
 
@@ -31,6 +32,8 @@ const SignUp = () => {
     const [upperCaseErr, setUpperCaseErr] = useState(false)
     const [lowerCaseErr, setLowerCaseErr] = useState(false)
     const [charsErr, setCharsErr] = useState(false)
+
+    // states from context
 
     const handleSubmit = (e: { preventDefault: () => void }) => {
         e.preventDefault()
@@ -60,7 +63,7 @@ const SignUp = () => {
 
             const response = api.post('/api/signup', { email, password })
                 .then((resp) => {
-                    console.log(resp.data)
+                    console.log(resp.data.user._id)
                     navigate('/dashboard')
                 })
                 .catch((error) => {
@@ -151,7 +154,7 @@ const SignUp = () => {
                     </div>
                     <div className="flex mt-3">
                         <p className="text-gray-600 dark:text-white">Already a member?</p>
-                        <Link className="text-blue-500 ml-1" to="login">Login</Link>
+                        <Link className="text-blue-500 ml-1" to="/login">Login</Link>
                     </div>
 
                 </div>

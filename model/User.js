@@ -13,6 +13,16 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please enter password'],
         minlength: [6, 'min length 6 char'],
     },
+    name: {
+        type: String,
+    },
+    bio: {
+        type: String,
+    },
+
+    phone: {
+        type: String,
+    },
 })
 
 // before doc saved

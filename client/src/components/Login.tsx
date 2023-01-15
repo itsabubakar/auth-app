@@ -13,6 +13,7 @@ import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
 import { Link, useNavigate } from "react-router-dom"
 import api from "./AxiosBase"
+import { UserContext } from "./Context"
 
 
 const Login = () => {
@@ -29,6 +30,9 @@ const Login = () => {
     const [upperCaseErr, setUpperCaseErr] = useState(false)
     const [lowerCaseErr, setLowerCaseErr] = useState(false)
     const [charsErr, setCharsErr] = useState(false)
+
+    // context states
+    const { setId, setUserEmail, setUserPassword } = useContext(UserContext)
 
     const handleSubmit = (e: { preventDefault: () => void }) => {
         e.preventDefault()
@@ -58,10 +62,11 @@ const Login = () => {
 
             const response = api.post('/api/login', { email, password })
                 .then((resp) => {
+                    setId(resp.data.user._id)
                     navigate('/dashboard')
                 })
                 .catch((error) => {
-                    console.log(error.response.data)
+                    console.log(error.message)
                     setLoginErr(true)
                 })
 

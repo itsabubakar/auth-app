@@ -43,9 +43,7 @@ async function login(req, res) {
     if (user) {
         const auth = await bcyrpt.compare(password, user.password)
         if (auth) {
-            console.log(auth)
-            res.status(200).json('login details correct')
-            return
+            return res.status(200).json({ user, password })
         }
         return res.status(400).json('password or email incorrect')
     }

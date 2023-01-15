@@ -13,9 +13,11 @@
 
  - [x] Set up back end to recieve data from frontend
  - [x] Set up models and mongoose schemas
- - [] Set up password hashing
+ - [x] Set up password hashing
+ - [x] Finish up login functionality with email
+ - [] Add functionality to show password on frontend 
+ - [] Add useeffect on login component that searches user email and displays it 
  - [] Add jwt to user auth 
- - [] Finish up login functionality with email
  - [] Add email confirmation
  - [] Add gmail as auth provider
  - [] Add facebook as auth provider
