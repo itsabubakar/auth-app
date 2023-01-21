@@ -4,11 +4,18 @@ import Drop from "../assets/Drop"
 import Profile from "../assets/Profile"
 import LogOut from "../assets/LogOut"
 import { Link } from "react-router-dom"
+import { useLogout } from "../hooks/useLogout"
+
 
 const Header = () => {
+    const { logout } = useLogout()
     const [drop, setDrop] = useState(false)
     const handleClick = () => {
         setDrop(!drop)
+    }
+
+    const Logout = () => {
+        logout()
     }
 
     return (
@@ -24,7 +31,7 @@ const Header = () => {
                 <ul className="flex flex-col gap-y-3">
                     <li className="flex gap-x-2 bg-[#F2F2F2] py-2 mx-2 px-4 rounded-lg text-gray-900"><Profile /> My Profile</li>
                     <hr className="mx-2" />
-                    <li className="flex gap-x-2 py-2 mx-2 px-4 rounded-lg text-red-500"><LogOut /> Logout</li>
+                    <button onClick={Logout} className="flex gap-x-2 py-2 mx-2 px-4 rounded-lg text-red-500"><LogOut /> Logout</button>
                 </ul>
             </nav>
         </header>

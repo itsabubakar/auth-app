@@ -1,12 +1,21 @@
 import { Link } from "react-router-dom"
 import Back from "../assets/Back"
 import Header from "./Header"
-import { SetStateAction, useContext, useState } from "react"
-import { UserContext } from "./Context"
+import { SetStateAction, useContext, useEffect, useState } from "react"
+import { UserContext } from "../context/Context"
+import api from "./AxiosBase"
+import { useAuthContext } from "../hooks/useAuthContext"
+
+// type User = {
+//     user : {
+//         email: string
+//     }
+// }
 
 const DetailsForm = () => {
+    const { user } = useAuthContext()
     // context states
-    const { id, email, password } = useContext(UserContext)
+    const { email, password } = useContext(UserContext)
 
     // form states
     const [name, setName] = useState('')
@@ -36,6 +45,18 @@ const DetailsForm = () => {
     const photoChange = () => {
         console.log('foo')
     }
+
+
+    useEffect(() => {
+        const response = api.post('/api/userdetail', { email })
+            .then((resp) => {
+                console.log(resp)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [])
+
     return (
         <div className="overflow-hidden">
             <Header />
@@ -67,7 +88,7 @@ const DetailsForm = () => {
                         </div>
                         <div className="mt-6">
                             <label htmlFor="email" className="text-gray-700">Email</label>
-                            <input readOnly={true} value={email} type="text" name="email" id="email" className="mt-2 outline-none border border-[#828282] w-full rounded-lg px-2 py-2" />
+                            <p className="mt-2 outline-none border border-[#828282] w-full rounded-lg px-2 py-2">{user.email}</p>
                         </div>
                         <div className="mt-6">
                             <label htmlFor="password" className="text-gray-700">Password</label>

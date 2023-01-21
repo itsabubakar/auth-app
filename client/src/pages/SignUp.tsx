@@ -1,25 +1,24 @@
 import { SetStateAction, useContext, useState } from "react"
-import { ThemeContext } from "./ThemeContext"
+import { ThemeContext } from "../context/ThemeContext"
 import DevChallenge from "../assets/DevChallenge"
 import Google from "../assets/Google"
 import Email from "../assets/Email"
 import Password from "../assets/Password"
-import Switch from "./Switch"
+import Switch from "../components/Switch"
 import Facebook from "../assets/Facebook"
 import Twitter from "../assets/Twitter"
 import Github from "../assets/Github"
 import DevChallengesLight from "../assets/DevChallengesLight"
 import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
-import { Link, useNavigate } from "react-router-dom"
-import api from "./AxiosBase"
-import { UserContext } from "./Context"
+import { Link, } from "react-router-dom"
+import { useSignup } from "../hooks/useSignup"
 
 
 
 
 const SignUp = () => {
-    const navigate = useNavigate()
+    const { signup } = useSignup()
 
     const { toggleDarkMode, value } = useContext(ThemeContext)
     const [email, setEmail] = useState('')
@@ -35,7 +34,7 @@ const SignUp = () => {
 
     // states from context
 
-    const handleSubmit = (e: { preventDefault: () => void }) => {
+    const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
         const validEmail = isEmail(email)
         const hasUpperCase = containsUpperCase(password)
@@ -60,18 +59,7 @@ const SignUp = () => {
         }
 
         if (validEmail && hasUpperCase && hasLowerCase && hasSixOrMoreChars) {
-
-            const response = api.post('/api/signup', { email, password })
-                .then((resp) => {
-                    console.log(resp.data.user._id)
-                    navigate('/dashboard')
-                })
-                .catch((error) => {
-                    console.log(error.response.data.email)
-                    setEmailExist(true)
-                })
-
-            return
+            await signup(email, password)
         }
     }
 

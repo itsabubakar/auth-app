@@ -7,7 +7,12 @@
  - [x] Add login form errors
  - [x] Build user info page
  - [x] Build Header page
+ - [] Add useeffect that searches user details and displays it
+ - [] Set up functionality to save user info to database
+ - [] Set up password hashing to show right amount of digits in password in frontend
  - [] design dark mode for dashboard page
+
+
 
  ## Backend
 
@@ -15,9 +20,8 @@
  - [x] Set up models and mongoose schemas
  - [x] Set up password hashing
  - [x] Finish up login functionality with email
- - [] Add functionality to show password on frontend 
- - [] Add useeffect on login component that searches user email and displays it 
- - [] Add jwt to user auth 
+ - [x] Add jwt to user auth 
+ - [] Navigate to dashboard after signup/login
  - [] Add email confirmation
  - [] Add gmail as auth provider
  - [] Add facebook as auth provider

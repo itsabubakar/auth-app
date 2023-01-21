@@ -1,23 +1,23 @@
 import { SetStateAction, useContext, useState } from "react"
-import { ThemeContext } from "./ThemeContext"
+import { ThemeContext } from "../context/ThemeContext"
 import DevChallenge from "../assets/DevChallenge"
 import Google from "../assets/Google"
 import Email from "../assets/Email"
 import Password from "../assets/Password"
-import Switch from "./Switch"
+import Switch from "../components/Switch"
 import Facebook from "../assets/Facebook"
 import Twitter from "../assets/Twitter"
 import Github from "../assets/Github"
 import DevChallengesLight from "../assets/DevChallengesLight"
 import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
-import { Link, useNavigate } from "react-router-dom"
-import api from "./AxiosBase"
-import { UserContext } from "./Context"
+import { Link } from "react-router-dom"
+import { UserContext } from "../context/Context"
+import { useLogin } from "../hooks/useLogin"
 
 
 const Login = () => {
-    const navigate = useNavigate()
+    const { login } = useLogin()
 
     const { toggleDarkMode, value } = useContext(ThemeContext)
     const [email, setEmail] = useState('')
@@ -34,7 +34,7 @@ const Login = () => {
     // context states
     const { setId, setUserEmail, setUserPassword } = useContext(UserContext)
 
-    const handleSubmit = (e: { preventDefault: () => void }) => {
+    const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
         const validEmail = isEmail(email)
         const hasUpperCase = containsUpperCase(password)
@@ -59,18 +59,7 @@ const Login = () => {
         }
 
         if (validEmail && hasUpperCase && hasLowerCase && hasSixOrMoreChars) {
-
-            const response = api.post('/api/login', { email, password })
-                .then((resp) => {
-                    setId(resp.data.user._id)
-                    navigate('/dashboard')
-                })
-                .catch((error) => {
-                    console.log(error.message)
-                    setLoginErr(true)
-                })
-
-            return
+            await login(email, password)
         }
     }
 

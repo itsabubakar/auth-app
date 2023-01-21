@@ -1,5 +1,6 @@
 const User = require('../model/User')
 const bcyrpt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 // handle errs
 function handleErrors(err) {
@@ -20,6 +21,13 @@ function handleErrors(err) {
     return errors
 }
 
+const maxAge = 24 * 60 * 60
+function createToken(id) {
+    return jwt.sign({ id }, 'sadiq b secret', {
+        expiresIn: maxAge
+    })
+}
+
 async function signup(req, res) {
     const { email, password } = req.body
     const salt = await bcyrpt.genSalt(10)
@@ -28,8 +36,9 @@ async function signup(req, res) {
     try {
         let password = hashPwd
         const user = await User.create({ email, password })
-        console.log(user)
-        res.status(201).json({ user })
+        const token = createToken(user._id)
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+        res.status(201).json({ email, token })
     } catch (error) {
         const errors = handleErrors(error)
         console.log(errors)
@@ -41,15 +50,35 @@ async function login(req, res) {
     const { email, password } = req.body
     const user = await User.findOne({ email })
     if (user) {
+        res.cookie('hello', 'test cookue')
         const auth = await bcyrpt.compare(password, user.password)
         if (auth) {
-            return res.status(200).json({ user, password })
+            const token = createToken(user._id)
+            res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+            return res.status(200).json({ email, token })
         }
         return res.status(400).json('password or email incorrect')
     }
 }
 
+async function findUser(req, res) {
+    console.log(req.body)
+    // const { email } = req.body
+    // const user = await User.findOne({ email })
+    // if (user) {
+    //     return res.status(200).json(user)
+    // }
+    // return res.status(400).json('password or email incorrect')
+}
+
+
+async function logout_get(req, res) {
+    res.cookie('jwt', '', { maxAge: 1 })
+    res.redirect('/')
+}
+
 module.exports = {
     signup,
-    login
+    login,
+    findUser
 }

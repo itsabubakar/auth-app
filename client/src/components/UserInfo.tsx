@@ -1,5 +1,5 @@
 import Header from "./Header"
-import UserDetail from "./UserDetail"
+import UserDetail from "../pages/UserDetail"
 
 const UserInfo = () => {
     return (
