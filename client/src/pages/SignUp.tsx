@@ -13,12 +13,15 @@ import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
 import { Link, } from "react-router-dom"
 import { useSignup } from "../hooks/useSignup"
+import Loading from "../components/Loading"
 
 
 
 
 const SignUp = () => {
     const { signup } = useSignup()
+    const [loading, setLoading] = useState(false)
+
 
     const { toggleDarkMode, value } = useContext(ThemeContext)
     const [email, setEmail] = useState('')
@@ -59,7 +62,13 @@ const SignUp = () => {
         }
 
         if (validEmail && hasUpperCase && hasLowerCase && hasSixOrMoreChars) {
-            await signup(email, password)
+            try {
+                setLoading(true)
+                await signup(email, password)
+            } catch (error) {
+                setLoading(false)
+                console.log(error)
+            }
         }
     }
 
@@ -97,7 +106,8 @@ const SignUp = () => {
 
     return (
         <div className="items-center grid justify-center h-screen dark:bg-[#333333]">
-            <div className="py-5 px-5 xs:border border-[#BDBDBD] xs:mx-4 xs:px-8 max-w-sm rounded-xl">
+            {loading && <Loading />}
+            {!loading && <div className="py-5 px-5 xs:border border-[#BDBDBD] xs:mx-4 xs:px-8 max-w-sm rounded-xl">
                 <div className="flex justify-between items-center mb-8">
                     {value ? <DevChallengesLight /> : <DevChallenge />}
 
@@ -147,7 +157,7 @@ const SignUp = () => {
 
                 </div>
 
-            </div>
+            </div>}
         </div>
     )
 }

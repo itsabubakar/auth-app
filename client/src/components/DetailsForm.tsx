@@ -1,30 +1,39 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import Back from "../assets/Back"
 import Header from "./Header"
-import { SetStateAction, useContext, useEffect, useState } from "react"
-import { UserContext } from "../context/Context"
+import { useContext, useEffect, useState } from "react"
 import api from "./AxiosBase"
 import { useAuthContext } from "../hooks/useAuthContext"
-
-// type User = {
-//     user : {
-//         email: string
-//     }
-// }
+import Loading from "./Loading"
 
 const DetailsForm = () => {
+    const [loading, setLoading] = useState(false)
+    const { id } = useParams()
+    // navigation
+    const navigate = useNavigate()
+
     const { user } = useAuthContext()
     // context states
-    const { email, password } = useContext(UserContext)
 
     // form states
     const [name, setName] = useState('')
     const [bio, setBio] = useState('')
-    const [phone, setPhone] = useState(0)
+    const [phone, setPhone] = useState()
+    const [_id, set_Id] = useState()
 
-    const handleSubmit = (e: { preventDefault: () => void }) => {
+
+    const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
-        console.log(e)
+        try {
+            setLoading(true)
+            const response = await api.post('/api/updateuser', { name, bio, phone, _id })
+            navigate(`/userinfo/${_id}`)
+            console.log(response.data)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+
     }
 
     // form change handlers
@@ -46,24 +55,40 @@ const DetailsForm = () => {
         console.log('foo')
     }
 
+    const fetchUser = async () => {
+
+        try {
+            const response = await api.post(`/api/userdetail`, { id })
+            setName(response.data.user?.name)
+            setBio(response.data.user?.bio)
+            setPhone(response.data.user?.phone)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     useEffect(() => {
-        const response = api.post('/api/userdetail', { email })
-            .then((resp) => {
-                console.log(resp)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+        const user = JSON.parse(localStorage.getItem('user') || '{}')
+        set_Id(user.userId)
+        try {
+            fetchUser()
+        } catch (error) {
+            console.log(error)
+        }
     }, [])
 
     return (
         <div className="overflow-hidden">
             <Header />
-            <div className="pt-20 max-w-5xl lg:mx-auto mx-5 ">
+            {loading && <div className="h-[70vh] items-center flex justify-center">
+                <Loading />
+            </div>}
+
+            {!loading && <div className="pt-20 max-w-5xl lg:mx-auto mx-5 ">
                 <div className="text-blue-500 flex items-center gap-x-2 mb-4">
                     <Back />
-                    <Link to="/" className="font-medium">Back</Link>
+                    <Link to={`/dashboard/${id}`} className="font-medium">Back</Link>
                 </div>
 
                 <div className="sm:border rounded-lg sm:px-10 sm:py-5">
@@ -92,12 +117,12 @@ const DetailsForm = () => {
                         </div>
                         <div className="mt-6">
                             <label htmlFor="password" className="text-gray-700">Password</label>
-                            <input readOnly={true} value={password} type="password" name="password" id="password" className="mt-2 outline-none border border-[#828282] w-full rounded-lg px-2 py-2" />
+                            <input disabled={true} value={user.regularPwd} type="password" name="password" id="password" className="mt-2 outline-none border border-[#828282] w-full rounded-lg px-2 py-2" />
                         </div>
                         <button type="submit" className="bg-blue-500 text-white py-2 px-3 rounded-lg mt-6">Save</button>
                     </form>
                 </div>
-            </div>
+            </div>}
         </div>
     )
 }

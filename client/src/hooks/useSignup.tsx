@@ -15,7 +15,8 @@ export const useSignup = () => {
         const response = await api.post('/api/signup', { email, password })
         try {
             console.log('hello')
-            console.log(response.data)
+            console.log(response.data.userId)
+            const id = response.data.userId
             setLoading(false)
             // save user to local storage
             localStorage.setItem('user', JSON.stringify(response.data))
@@ -24,7 +25,7 @@ export const useSignup = () => {
             dispatch({ type: 'LOGIN', payload: response.data })
 
             // navigate to dashboard
-            navigate('/dashboard')
+            navigate(`/edit/${id}`)
         } catch (error) {
             console.log('fuck is going on?')
             console.log(error)

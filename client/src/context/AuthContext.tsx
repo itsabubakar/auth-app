@@ -2,7 +2,8 @@ import { ReactNode, createContext, useEffect, useReducer } from "react"
 
 type Context = {
     user: {
-        email: string
+        email: string,
+        regularPwd: string,
     },
     dispatch: React.Dispatch<{
         type: any;
@@ -12,7 +13,8 @@ type Context = {
 
 const defaultContext = {
     user: {
-        email: ''
+        email: '',
+        regularPwd: ''
     },
     dispatch: () => { }
 }

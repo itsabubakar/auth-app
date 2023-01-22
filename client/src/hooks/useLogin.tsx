@@ -17,13 +17,14 @@ export const useLogin = () => {
         try {
             console.log(response.data)
             setLoading(false)
+            const id = response.data.userId
 
             // save user to local storage
             localStorage.setItem('user', JSON.stringify(response.data))
 
             // update the auth context
             dispatch({ type: 'LOGIN', payload: response.data })
-            navigate('/dashboard')
+            navigate(`/dashboard/${id}`)
         } catch (error) {
             console.log(error)
             setLoading(false)

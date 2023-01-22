@@ -1,8 +1,34 @@
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom"
+import api from "./AxiosBase"
 
 const UserDetail = () => {
+    const { id } = useParams()
+
+    const [name, setName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [bio, setBio] = useState('')
+    const [email, setEmail] = useState('')
+
+    const fetchUser = async () => {
+        try {
+            const response = await api.post(`/api/userdetail`, { id })
+            setName(response.data.user.name)
+            setBio(response.data.user.bio)
+            setPhone(response.data.user.phone)
+            setEmail(response.data.user.email)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchUser()
+    }, [])
+
     return (
-        <div className="pt-20">
+        <div className="py-20">
             <div className="mb-8">
                 <h2 className="text-2xl font-semibold sm:text-4xl mb-1 text-gray-800 text-center">Personal info</h2>
                 <p className="text-gray-800 text-center">Basic info, like your name and photo</p>
@@ -16,7 +42,7 @@ const UserDetail = () => {
                         <p className="text-2xl text-gray-900">Profile</p>
                         <p className="text-gray-800">Some info may be visible to other people</p>
                     </div>
-                    <Link to='edit' className="text-gray-800 border border-[#828282] px-6 py-1 rounded-xl h-[fit-content]">Edit</Link>
+                    <Link to={`/edit/${id}`} className="text-gray-800 border border-[#828282] px-6 py-1 rounded-xl h-[fit-content]">Edit</Link>
                 </div>
                 <hr />
 
@@ -30,21 +56,28 @@ const UserDetail = () => {
                 {/* name */}
                 <div className="mx-5 sm:mx-10 h-24 flex justify-between items-center">
                     <p className="text-gray-700">NAME</p>
-                    <p className="font-semibold">Sadiq B</p>
+                    <p className="font-semibold">{name}</p>
                 </div>
                 <hr />
 
                 {/* bio */}
                 <div className="mx-5 sm:mx-10 h-24 flex justify-between items-center">
                     <p className="text-gray-700">BIO</p>
-                    <p className="font-semibold truncate w-60 text-ellipsis">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque dicta illum tempora cumque quasi exercitationem consectetur dolor expedita odit libero ipsam, dolorum, nihil facilis rem a doloribus suscipit quibusdam ad.</p>
+                    <p className="font-semibold truncate  w-60 sm:w-[400px] text-ellipsis text-end">{bio}</p>
+                </div>
+                <hr />
+
+                {/* phone */}
+                <div className="mx-5 sm:mx-10 h-24 flex justify-between items-center">
+                    <p className="text-gray-700">Phone</p>
+                    <p className="font-semibold text-end">{phone}</p>
                 </div>
                 <hr />
 
                 {/* email */}
                 <div className="mx-5 sm:mx-10 h-24 flex justify-between items-center">
                     <p className="text-gray-700">EMAIL</p>
-                    <p className="font-semibold">SadiqB@gmail.com</p>
+                    <p className="font-semibold">{email}</p>
                 </div>
                 <hr />
 

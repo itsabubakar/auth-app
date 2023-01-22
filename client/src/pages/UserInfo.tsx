@@ -1,9 +1,9 @@
-import Header from "./Header"
-import UserDetail from "../pages/UserDetail"
+import Header from "../components/Header"
+import UserDetail from "../components/UserDetail"
 
 const UserInfo = () => {
     return (
-        <div>
+        <div className="overflow-hidden">
             <Header />
             <UserDetail />
         </div>

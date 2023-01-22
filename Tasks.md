@@ -7,10 +7,13 @@
  - [x] Add login form errors
  - [x] Build user info page
  - [x] Build Header page
- - [] Add useeffect that searches user details and displays it
- - [] Set up functionality to save user info to database
+ - [x] Add useeffect that searches user details and displays it on details display page
+ - [] set up functionality to upload profile pictures
+ - [x] set up loading functionality
  - [] Set up password hashing to show right amount of digits in password in frontend
+ - [x] Set up functionality to save user info to database
  - [] design dark mode for dashboard page
+ - [] Add errors when signing up or logging in on frontend
 
 
 
@@ -21,7 +24,7 @@
  - [x] Set up password hashing
  - [x] Finish up login functionality with email
  - [x] Add jwt to user auth 
- - [] Navigate to dashboard after signup/login
+ - [x] Navigate to dashboard after signup/login
  - [] Add email confirmation
  - [] Add gmail as auth provider
  - [] Add facebook as auth provider

@@ -12,12 +12,13 @@ import DevChallengesLight from "../assets/DevChallengesLight"
 import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
 import { Link } from "react-router-dom"
-import { UserContext } from "../context/Context"
 import { useLogin } from "../hooks/useLogin"
+import Loading from "../components/Loading"
 
 
 const Login = () => {
     const { login } = useLogin()
+    const [loading, setLoading] = useState(false)
 
     const { toggleDarkMode, value } = useContext(ThemeContext)
     const [email, setEmail] = useState('')
@@ -32,7 +33,6 @@ const Login = () => {
     const [charsErr, setCharsErr] = useState(false)
 
     // context states
-    const { setId, setUserEmail, setUserPassword } = useContext(UserContext)
 
     const handleSubmit = async (e: { preventDefault: () => void }) => {
         e.preventDefault()
@@ -59,7 +59,14 @@ const Login = () => {
         }
 
         if (validEmail && hasUpperCase && hasLowerCase && hasSixOrMoreChars) {
-            await login(email, password)
+            try {
+                setLoading(true)
+                await login(email, password)
+            } catch (error) {
+                console.log(error)
+                setLoading(false)
+
+            }
         }
     }
 
@@ -99,7 +106,8 @@ const Login = () => {
 
     return (
         <div className="items-center grid justify-center h-screen dark:bg-[#333333]">
-            <div className="py-5 px-5 xs:border border-[#BDBDBD] xs:mx-4 xs:px-8 max-w-md rounded-xl">
+            {loading && <Loading />}
+            {!loading && <div className="py-5 px-5 xs:border border-[#BDBDBD] xs:mx-4 xs:px-8 max-w-md rounded-xl">
                 <div className="flex justify-between items-center mb-8">
                     {value ? <DevChallengesLight /> : <DevChallenge />}
 
@@ -145,7 +153,7 @@ const Login = () => {
 
                 </div>
 
-            </div>
+            </div>}
         </div>
     )
 }
