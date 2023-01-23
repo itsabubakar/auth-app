@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import api from "./AxiosBase"
+import { useAuthContext } from "../hooks/useAuthContext"
 
 const UserDetail = () => {
     const { id } = useParams()
+    const { user } = useAuthContext()
+
 
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
@@ -84,7 +87,7 @@ const UserDetail = () => {
                 {/* password */}
                 <div className="mx-5 sm:mx-10 h-24 flex justify-between items-center">
                     <p className="text-gray-700">PASSWORD</p>
-                    <input type="password" value={12345678} readOnly={true} className="text-end outline-none" />
+                    <input type="password" value={user.regularPwd} readOnly={true} className="text-end outline-none" />
                 </div>
                 <hr className="sm:hidden" />
             </div>

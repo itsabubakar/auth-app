@@ -1,4 +1,4 @@
-import { SetStateAction, useContext, useState } from "react"
+import { SetStateAction, useContext, useEffect, useState } from "react"
 import { ThemeContext } from "../context/ThemeContext"
 import DevChallenge from "../assets/DevChallenge"
 import Google from "../assets/Google"
@@ -16,8 +16,6 @@ import { useSignup } from "../hooks/useSignup"
 import Loading from "../components/Loading"
 
 
-
-
 const SignUp = () => {
     const { signup } = useSignup()
     const [loading, setLoading] = useState(false)
@@ -30,7 +28,7 @@ const SignUp = () => {
 
     // error states
     const [emailErr, setEmailErr] = useState(false)
-    const [emailExist, setEmailExist] = useState(false)
+    const [emailExist, setEmailExist] = useState('')
     const [upperCaseErr, setUpperCaseErr] = useState(false)
     const [lowerCaseErr, setLowerCaseErr] = useState(false)
     const [charsErr, setCharsErr] = useState(false)
@@ -65,9 +63,9 @@ const SignUp = () => {
             try {
                 setLoading(true)
                 await signup(email, password)
-            } catch (error) {
+            } catch (error: any) {
                 setLoading(false)
-                console.log(error)
+                setEmailExist(error.response.data.email)
             }
         }
     }
@@ -75,7 +73,7 @@ const SignUp = () => {
     const handleEmailChange = (e: { target: { value: SetStateAction<string> } }) => {
         setEmail(e.target.value)
         setEmailErr(false)
-        setEmailExist(false)
+        setEmailExist('')
     }
 
     const handlePasswordChange = (e: { target: { value: string } }) => {
@@ -124,7 +122,7 @@ const SignUp = () => {
                 <form onSubmit={handleSubmit}>
 
                     <span>{emailErr && <p className="text-center mb-2 text-red-500">Please enter a valid email</p>}</span>
-                    <span>{emailExist && <p className="text-center mb-2 text-red-500">Email already exists</p>}</span>
+                    <span>{emailExist && <p className="text-center mb-2 text-red-500">{emailExist}</p>}</span>
                     <div className={`${emailErr ? 'border-red-500' : 'border-[#BDBDBD]'} border mb-4 py-2 rounded-lg flex`}>
                         <label className="mx-3" htmlFor="email"><Email /></label>
                         <input value={email} onChange={handleEmailChange} className={`w-full outline-none dark:bg-inherit dark:text-white`} type="text" placeholder="Email" name="email" />
@@ -149,7 +147,10 @@ const SignUp = () => {
                         <button className=""><Facebook /></button>
                         <button className=""><Twitter /></button>
                         <button className=""><Github /></button>
+
+
                     </div>
+
                     <div className="flex mt-3">
                         <p className="text-gray-600 dark:text-white">Already a member?</p>
                         <Link className="text-blue-500 ml-1" to="/login">Login</Link>

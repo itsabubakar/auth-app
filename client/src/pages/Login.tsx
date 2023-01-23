@@ -31,6 +31,7 @@ const Login = () => {
     const [upperCaseErr, setUpperCaseErr] = useState(false)
     const [lowerCaseErr, setLowerCaseErr] = useState(false)
     const [charsErr, setCharsErr] = useState(false)
+    const [incorrectDetails, setIncorrectDetails] = useState('')
 
     // context states
 
@@ -62,8 +63,8 @@ const Login = () => {
             try {
                 setLoading(true)
                 await login(email, password)
-            } catch (error) {
-                console.log(error)
+            } catch (error: any) {
+                setIncorrectDetails(error.response.data)
                 setLoading(false)
 
             }
@@ -74,6 +75,7 @@ const Login = () => {
         setEmail(e.target.value)
         setEmailErr(false)
         setLoginErr(false)
+        setIncorrectDetails('')
     }
 
     const handlePasswordChange = (e: { target: { value: string } }) => {
@@ -82,6 +84,7 @@ const Login = () => {
         setLowerCaseErr(false)
         setUpperCaseErr(false)
         setLoginErr(false)
+        setIncorrectDetails('')
     }
 
     const handleVisibility = () => {
@@ -124,6 +127,8 @@ const Login = () => {
 
                     <span>{loginErr && <p className="text-center mb-2 text-red-500">Email or password incorrect</p>}</span>
 
+                    <span>{incorrectDetails && <p className="text-center mb-2 capitalize text-red-500">{incorrectDetails}</p>}</span>
+
                     <div className="border-[#BDBDBD] border mb-4 py-2 rounded-lg flex">
                         <label className="mx-3" htmlFor="email"><Email /></label>
                         <input value={email} onChange={handleEmailChange} className="w-full outline-none dark:bg-inherit dark:text-white" type="text" placeholder="Email" name="email" />
@@ -132,7 +137,7 @@ const Login = () => {
                     <div className="border-[#BDBDBD] border mb-4 py-2 rounded-lg flex">
                         <label className="mx-2.5" htmlFor="password"><Password /></label>
                         <input value={password} onChange={handlePasswordChange} className="w-full outline-none dark:bg-[#333333] dark:text-white" type={pwdVisibility} placeholder="Password" name="password" />
-                        <button onClick={handleVisibility} className="mr-1">{pwdVisibility === 'password' ? <Eye /> : <EyeHidden />}</button>
+                        <button type="button" onClick={handleVisibility} className="mr-1">{pwdVisibility === 'password' ? <Eye /> : <EyeHidden />}</button>
                     </div>
                     <button className="bg-blue-500 text-white w-full py-1.5 text-base font-semibold rounded-lg" type="submit">Start coding now</button>
                 </form>

@@ -8,12 +8,12 @@
  - [x] Build user info page
  - [x] Build Header page
  - [x] Add useeffect that searches user details and displays it on details display page
- - [] set up functionality to upload profile pictures
  - [x] set up loading functionality
- - [] Set up password hashing to show right amount of digits in password in frontend
  - [x] Set up functionality to save user info to database
+ - [x] Add errors when signing up or logging in on frontend
+ - [x] Set up functionality to show right amount of digits in password in frontend
+ - [] set up functionality to upload profile pictures
  - [] design dark mode for dashboard page
- - [] Add errors when signing up or logging in on frontend
 
 
 
