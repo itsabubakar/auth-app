@@ -8,6 +8,7 @@ import DetailsForm from './components/DetailsForm'
 import Auth from './context/AuthContext'
 
 
+
 const App = () => {
 
   return (

@@ -1,13 +1,9 @@
 import { SetStateAction, useContext, useState } from "react"
 import { ThemeContext } from "../context/ThemeContext"
 import DevChallenge from "../assets/DevChallenge"
-import Google from "../assets/Google"
 import Email from "../assets/Email"
 import Password from "../assets/Password"
 import Switch from "../components/Switch"
-import Facebook from "../assets/Facebook"
-import Twitter from "../assets/Twitter"
-import Github from "../assets/Github"
 import DevChallengesLight from "../assets/DevChallengesLight"
 import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
@@ -143,14 +139,6 @@ const Login = () => {
                 </form>
 
                 <div className="flex flex-col items-center">
-                    <p className="my-6 text-gray-600 dark:text-white">or continue with these social profile</p>
-
-                    <div className="flex w-full justify-between max-w-[250px]">
-                        <button className=""><Google /></button>
-                        <button className=""><Facebook /></button>
-                        <button className=""><Twitter /></button>
-                        <button className=""><Github /></button>
-                    </div>
                     <div className="flex mt-3">
                         <p className="text-gray-600 dark:text-white">Don't have an account yet?</p>
                         <Link className="text-blue-500 ml-1" to="/">Register</Link>

@@ -1,13 +1,9 @@
 import { SetStateAction, useContext, useEffect, useState } from "react"
 import { ThemeContext } from "../context/ThemeContext"
 import DevChallenge from "../assets/DevChallenge"
-import Google from "../assets/Google"
 import Email from "../assets/Email"
 import Password from "../assets/Password"
 import Switch from "../components/Switch"
-import Facebook from "../assets/Facebook"
-import Twitter from "../assets/Twitter"
-import Github from "../assets/Github"
 import DevChallengesLight from "../assets/DevChallengesLight"
 import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
@@ -17,6 +13,7 @@ import Loading from "../components/Loading"
 
 
 const SignUp = () => {
+
     const { signup } = useSignup()
     const [loading, setLoading] = useState(false)
 
@@ -103,7 +100,7 @@ const SignUp = () => {
     }
 
     return (
-        <div className="items-center grid justify-center h-screen dark:bg-[#333333]">
+        <div className="items-center grid justify-center h-screen">
             {loading && <Loading />}
             {!loading && <div className="py-5 px-5 xs:border border-[#BDBDBD] xs:mx-4 xs:px-8 max-w-sm rounded-xl">
                 <div className="flex justify-between items-center mb-8">
@@ -134,23 +131,12 @@ const SignUp = () => {
                     <div className={`${charsErr || upperCaseErr || lowerCaseErr ? 'border-red-500' : 'border-[#BDBDBD]'} border mb-4 py-2 rounded-lg flex`}>
                         <label className="mx-2.5" htmlFor="password"><Password /></label>
                         <input value={password} onChange={handlePasswordChange} className="w-full outline-none dark:bg-[#333333] dark:text-white" type={pwdVisibility} placeholder="Password" name="password" />
-                        <button onClick={handleVisibility} className="mr-1">{pwdVisibility === 'password' ? <Eye /> : <EyeHidden />}</button>
+                        <button type="button" onClick={handleVisibility} className="mr-1">{pwdVisibility === 'password' ? <Eye /> : <EyeHidden />}</button>
                     </div>
                     <button className="bg-blue-500 text-white w-full py-1.5 text-base font-semibold rounded-lg" type="submit">Start coding now</button>
                 </form>
 
                 <div className="flex flex-col items-center">
-                    <p className="my-6 text-gray-600 dark:text-white">or continue with these social profile</p>
-
-                    <div className="flex w-full justify-between max-w-[250px]">
-                        <button className=""><Google /></button>
-                        <button className=""><Facebook /></button>
-                        <button className=""><Twitter /></button>
-                        <button className=""><Github /></button>
-
-
-                    </div>
-
                     <div className="flex mt-3">
                         <p className="text-gray-600 dark:text-white">Already a member?</p>
                         <Link className="text-blue-500 ml-1" to="/login">Login</Link>

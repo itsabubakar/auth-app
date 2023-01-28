@@ -3,7 +3,7 @@ import UserDetail from "../components/UserDetail"
 
 const UserInfo = () => {
     return (
-        <div className="overflow-hidden">
+        <div className="overflow-hidden dark:text-white">
             <Header />
             <UserDetail />
         </div>

@@ -19,10 +19,12 @@ const userSchema = new mongoose.Schema({
     bio: {
         type: String,
     },
-
     phone: {
         type: String,
     },
+    url: {
+        type: String,
+    }
 })
 
 // before doc saved

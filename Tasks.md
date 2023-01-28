@@ -25,8 +25,3 @@
  - [x] Finish up login functionality with email
  - [x] Add jwt to user auth 
  - [x] Navigate to dashboard after signup/login
- - [] Add email confirmation
- - [] Add gmail as auth provider
- - [] Add facebook as auth provider
- - [] Add github as auth provider
- - [] Add twitter as auth provider

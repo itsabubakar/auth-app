@@ -66,12 +66,13 @@ async function login(req, res) {
 }
 
 async function updateUser(req, res) {
-    const { name, bio, phone, _id } = req.body
+    const { name, bio, phone, _id, url } = req.body
     const user = await User.findOne({ _id })
     if (user) {
         user.name = name
         user.bio = bio
         user.phone = phone
+        user.url = url
         await user.save()
         console.log(user)
         return res.status(200).json({ name, bio, phone })

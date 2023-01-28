@@ -55,7 +55,9 @@ const Theme = ({ children }: { children: ReactNode }) => {
         <ThemeContext.Provider value={{
             theme, setTheme, toggleDarkMode, value, setValue
         }}>
-            {children}
+            <div className="dark:bg-[#333333] h-full">
+                {children}
+            </div>
         </ThemeContext.Provider>
     )
 }
