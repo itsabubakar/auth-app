@@ -26,7 +26,7 @@ const Header = () => {
             <DevChallenge />
 
             <button className="flex gap-x-2.5 items-center" onClick={handleClick}>
-                <img src="" alt="" className="w-8 h-8 rounded-lg bg-blue-500" />
+                {/* <img src="" alt="" className="w-8 h-8 rounded-lg bg-blue-500" /> */}
                 <p className="font-semibold hidden xs:block">{user.email}</p>
                 <div className={`${drop && 'rotate-180'} transition mt-1 hidden xs:block`}><Drop /></div>
             </button>
