@@ -7,15 +7,24 @@ import Switch from "../components/Switch"
 import DevChallengesLight from "../assets/DevChallengesLight"
 import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
-import { Link, } from "react-router-dom"
+import { Link, useNavigate, } from "react-router-dom"
 import { useSignup } from "../hooks/useSignup"
 import Loading from "../components/Loading"
+
+import { GoogleLogin } from '@react-oauth/google'
+import jwtDecode from "jwt-decode"
+import api from "../components/AxiosBase"
+import { useAuthContext } from "../hooks/useAuthContext"
 
 
 const SignUp = () => {
 
     const { signup } = useSignup()
+    const { dispatch } = useAuthContext()
+
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+
 
 
     const { toggleDarkMode, value } = useContext(ThemeContext)
@@ -99,6 +108,33 @@ const SignUp = () => {
         else { return false }
     }
 
+    const handleGoogle = async (credentialResponse: any) => {
+        setLoading(true)
+        const userInfo: { name: string, email: string, picture: string } = jwtDecode(credentialResponse.credential)
+        const name = (userInfo.name)
+        const email = (userInfo.email)
+        const url = (userInfo.picture)
+
+        const user = { name, email, url }
+
+        const response = api.post('/api/google', user)
+            .then((resp) => {
+                console.log(resp.data)
+                setLoading(false)
+                // save user to local storage
+                localStorage.setItem('user', JSON.stringify(resp.data))
+
+                // update the auth context
+                dispatch({ type: 'LOGIN', payload: resp.data })
+                navigate(`/edit/${resp.data.userId}`)
+            })
+            .catch((err) => {
+                console.log(err)
+                setLoading(false)
+            })
+
+    }
+
     return (
         <div className="items-center grid justify-center h-screen">
             {loading && <Loading />}
@@ -135,6 +171,19 @@ const SignUp = () => {
                     </div>
                     <button className="bg-blue-500 text-white w-full py-1.5 text-base font-semibold rounded-lg" type="submit">Start coding now</button>
                 </form>
+                <p className="text-center dark:text-white my-4">Or login with</p>
+                <div className="flex justify-center mt-4">
+                    <GoogleLogin
+                        type="icon"
+                        shape="circle"
+                        onSuccess={handleGoogle}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                    />
+                </div>
+
+
 
                 <div className="flex flex-col items-center">
                     <div className="flex mt-3">

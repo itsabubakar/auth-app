@@ -63,7 +63,7 @@ const UserDetail = () => {
                 {/* photo */}
                 <div className="mx-5 sm:mx-10 h-24 flex justify-between items-center">
                     <p className="text-gray-700 dark:text-white">PHOTO</p>
-                    <img src={url} alt="" className="bg-blue-500 w-10 h-10 rounded-lg" />
+                    <img src={url ? url : user.url ? user.url : ''} alt="" className="bg-blue-500 w-10 h-10 rounded-lg" />
                 </div>
                 <hr />
 
@@ -97,8 +97,8 @@ const UserDetail = () => {
 
                 {/* password */}
                 <div className="mx-5 sm:mx-10 h-24 flex justify-between items-center">
-                    <p className="text-gray-700">PASSWORD</p>
-                    <input type="password" value={user.regularPwd} readOnly={true} className="text-end outline-none bg-inherit" />
+                    <p className="text-gray-700 dark:text-white">PASSWORD</p>
+                    <input type="password" value={user.regularPwd ? user.regularPwd : '........'} readOnly={true} className="text-end outline-none bg-inherit" />
                 </div>
                 <hr className="sm:hidden" />
             </div>

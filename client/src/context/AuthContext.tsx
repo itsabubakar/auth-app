@@ -3,7 +3,8 @@ import { ReactNode, createContext, useEffect, useReducer } from "react"
 type Context = {
     user: {
         email: string,
-        regularPwd: string,
+        regularPwd?: string,
+        url?: string
     },
     dispatch: React.Dispatch<{
         type: any;

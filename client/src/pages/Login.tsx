@@ -7,12 +7,19 @@ import Switch from "../components/Switch"
 import DevChallengesLight from "../assets/DevChallengesLight"
 import Eye from "../assets/Eye"
 import EyeHidden from "../assets/EyeHidden"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useLogin } from "../hooks/useLogin"
 import Loading from "../components/Loading"
+import api from "../components/AxiosBase"
+import { useAuthContext } from "../hooks/useAuthContext"
+import jwtDecode from "jwt-decode"
+import { GoogleLogin } from "@react-oauth/google"
 
 
 const Login = () => {
+    const { dispatch } = useAuthContext()
+    const navigate = useNavigate()
+
     const { login } = useLogin()
     const [loading, setLoading] = useState(false)
 
@@ -102,6 +109,33 @@ const Login = () => {
         else { return false }
     }
 
+    const handleGoogle = async (credentialResponse: any) => {
+        setLoading(true)
+        const userInfo: { name: string, email: string, picture: string } = jwtDecode(credentialResponse.credential)
+        const name = (userInfo.name)
+        const email = (userInfo.email)
+        const url = (userInfo.picture)
+
+        const user = { name, email, url }
+
+        const response = api.post('/api/google', user)
+            .then((resp) => {
+                console.log(resp.data)
+                setLoading(false)
+                // save user to local storage
+                localStorage.setItem('user', JSON.stringify(resp.data))
+
+                // update the auth context
+                dispatch({ type: 'LOGIN', payload: resp.data })
+                navigate(`/dashboard/${resp.data.userId}`)
+            })
+            .catch((err) => {
+                console.log(err)
+                setLoading(false)
+            })
+
+    }
+
 
     return (
         <div className="items-center grid justify-center h-screen dark:bg-[#333333]">
@@ -137,6 +171,18 @@ const Login = () => {
                     </div>
                     <button className="bg-blue-500 text-white w-full py-1.5 text-base font-semibold rounded-lg" type="submit">Start coding now</button>
                 </form>
+
+                <p className="text-center dark:text-white my-4">Or login with</p>
+                <div className="flex justify-center mt-4">
+                    <GoogleLogin
+                        type="icon"
+                        shape="circle"
+                        onSuccess={handleGoogle}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                    />
+                </div>
 
                 <div className="flex flex-col items-center">
                     <div className="flex mt-3">

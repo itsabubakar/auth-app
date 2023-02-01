@@ -104,6 +104,7 @@ const DetailsForm = () => {
             console.log(error)
         }
     }
+    { console.log(url) }
 
 
     useEffect(() => {
@@ -135,7 +136,7 @@ const DetailsForm = () => {
                     <form className="" onSubmit={handleSubmit}>
                         <div className="mt-6 flex items-center gap-3">
                             <div>
-                                {imgUpload ? <Loading /> : <img src={url ? url : ''} className={url ? "h-20 w-20 rounded-xl" : 'bg-blue-500 h-20 w-20 rounded-xl'} alt="profile img" />}
+                                {imgUpload ? <Loading /> : <img src={url ? url : user.url ? user.url : ''} className={url ? "h-20 w-20 rounded-xl" : 'bg-blue-500 h-20 w-20 rounded-xl'} alt="profile img" />}
                             </div>
 
                             <label
@@ -170,7 +171,7 @@ const DetailsForm = () => {
                         </div>
                         <div className="mt-6">
                             <label htmlFor="password" className="text-gray-700 dark:text-white">Password</label>
-                            <input disabled={true} value={user.regularPwd} type="password" name="password" id="password" className="mt-2 outline-none border border-[#828282] w-full rounded-lg px-2 py-2 bg-inherit" />
+                            <input disabled={true} value={user.regularPwd ? user.regularPwd : '........'} type="password" name="password" id="password" className="mt-2 outline-none border border-[#828282] w-full rounded-lg px-2 py-2 bg-inherit" />
                         </div>
                         <button type="submit" className="bg-blue-500 text-white py-2 px-3 rounded-lg mt-6">Save</button>
                     </form>

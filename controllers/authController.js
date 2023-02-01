@@ -48,6 +48,32 @@ async function signup(req, res) {
     }
 }
 
+// google sign up
+async function gSignup(req, res) {
+    console.log('hit')
+    const { email, name, url } = req.body
+
+    const user = await User.findOne({ email })
+
+    if (user) {
+        const token = createToken(user._id)
+        const userId = user._id
+        return res.status(201).json({ email, token, userId, url })
+    }
+    else {
+        try {
+            const user = await User.create({ email, name, url })
+            const userId = user._id
+            const token = createToken(user._id)
+            res.status(201).json({ email, token, userId, url })
+        } catch (error) {
+            const errors = handleErrors(error)
+            console.log(errors)
+            res.status(400).json(errors)
+        }
+    }
+}
+
 async function login(req, res) {
     const { email, password } = req.body
     const user = await User.findOne({ email })
@@ -96,5 +122,6 @@ module.exports = {
     signup,
     login,
     findUser,
-    updateUser
+    updateUser,
+    gSignup
 }

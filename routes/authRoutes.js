@@ -2,10 +2,11 @@ const { Router } = require('express')
 const router = Router()
 
 const {
-    signup, login, findUser, updateUser
+    signup, login, findUser, updateUser, gSignup
 } = require('../controllers/authController')
 
 
+router.route('/google').post(gSignup)
 router.route('/signup').post(signup)
 router.route('/login').post(login)
 router.route('/userdetail').post(findUser)

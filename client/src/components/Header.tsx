@@ -22,7 +22,7 @@ const Header = () => {
     }
 
     return (
-        <header className="flex justify-between px-5 py-5 items-center sm:px-20 relative w-full">
+        <header className="flex justify-between px-5 py-5 items-center sm:px-20 relative w-full z-10">
             <DevChallenge />
 
             <button className="flex gap-x-2.5 items-center" onClick={handleClick}>
